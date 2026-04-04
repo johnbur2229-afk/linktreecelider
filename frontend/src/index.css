@@ -3,8 +3,23 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   body {
-    font-family: 'Inter', sans-serif;
+    @apply bg-dark-900 text-slate-200 font-sans;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+  img, video {
+    @apply max-w-full h-auto;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
   }
 }
 
@@ -12,17 +27,23 @@
   .glassmorphism {
     @apply bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl;
   }
-  
+  .glassmorphism-dark {
+    @apply bg-dark-800/70 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    @apply px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-700 text-white font-semibold rounded-xl hover:from-primary-600 hover:to-primary-800 transition-all duration-300 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 active:scale-95;
   }
-  
   .btn-secondary {
-    @apply px-6 py-3 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/30 hover:bg-white/30 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2;
+    @apply px-6 py-3 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/30 hover:bg-white/30 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 active:scale-95;
   }
-  
   .card-hover {
-    @apply transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl;
+    @apply transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:-translate-y-1;
+  }
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-cyan-400 bg-clip-text text-transparent;
+  }
+  .bg-gradient-radial {
+    background-image: radial-gradient(circle at 50% 50%, var(--tw-gradient-stops));
   }
 }
 
@@ -31,18 +52,32 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes slideUp {
   from { transform: translateY(30px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
 }
 
 .animate-fadeIn {
   animation: fadeIn 0.6s ease-out forwards;
 }
-
 .animate-slideUp {
   animation: slideUp 0.5s ease-out forwards;
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, #f6f7f8 4%, #edeef1 25%, #f6f7f8 36%);
+  background-size: 1000px 100%;
 }
 
 /* Responsive design utilities */
@@ -54,17 +89,38 @@
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
-
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-dark-800;
 }
-
 ::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-blue-400 to-purple-500 rounded-full;
+  @apply bg-gradient-to-b from-primary-500 to-cyan-500 rounded-full border-2 border-dark-900;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply from-primary-600 to-cyan-600;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  @apply from-blue-500 to-purple-600;
+/* Selection styling */
+::selection {
+  @apply bg-primary-500/30 text-white;
+}
+
+/* Improve focus styles for accessibility */
+*:focus {
+  @apply outline-none;
+}
+*:focus-visible {
+  @apply ring-2 ring-primary-500 ring-offset-2 ring-offset-dark-900;
+}
+
+/* Smooth image loading */
+img {
+  @apply transition-opacity duration-300;
+}
+img[data-loading] {
+  @apply opacity-0;
+}
+img[data-loaded] {
+  @apply opacity-100;
 }

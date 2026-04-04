@@ -1,9 +1,12 @@
-import { useState, useEffect, useMemo } from 'react'
-import EmprendimientoCard from './components/EmprendimientoCard'
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react'
 import SearchBar from './components/SearchBar'
 import CategoryFilter from './components/CategoryFilter'
 import Footer from './components/Footer'
+import ScrollToTop from './components/ScrollToTop'
 import { FiLoader } from 'react-icons/fi'
+
+// Lazy load heavy components
+const EmprendimientoCard = lazy(() => import('./components/EmprendimientoCard'))
 
 // Configuración de Estrategia de Caché
 const CACHE_KEY = 'celider_data_v1';
@@ -96,12 +99,12 @@ function App() {
   // Pantalla de carga inteligente: Solo si no hay datos previos para mostrar
   if (loading && emprendimientos.length === 0) {
     return (
-      <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center text-white">
+      <div className="min-h-screen bg-dark-900 flex flex-col items-center justify-center text-white">
         <div className="relative flex items-center justify-center">
-          <div className="absolute w-24 h-24 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
-          <FiLoader className="w-10 h-10 text-blue-400 animate-pulse" />
+          <div className="absolute w-24 h-24 border-4 border-primary-500/20 border-t-primary-500 rounded-full animate-spin"></div>
+          <FiLoader className="w-10 h-10 text-primary-400 animate-pulse" />
         </div>
-        <p className="mt-8 text-blue-200/50 font-medium tracking-widest uppercase text-xs">Cargando Directorio</p>
+        <p className="mt-8 text-primary-200/50 font-medium tracking-widest uppercase text-xs">Cargando Directorio</p>
       </div>
     );
   }
@@ -109,7 +112,7 @@ function App() {
   // Pantalla de error (solo si no pudimos recuperar ni el caché)
   if (error && emprendimientos.length === 0) {
     return (
-      <div className="min-h-screen bg-[#020617] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-dark-900 flex items-center justify-center p-6">
         <div className="bg-white/[0.03] backdrop-blur-xl border border-red-500/20 p-10 rounded-[2.5rem] max-w-sm w-full text-center shadow-2xl">
           <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">⚠️</div>
           <h2 className="text-xl font-bold text-white mb-2">Sin conexión</h2>
@@ -126,31 +129,32 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-blue-500 selection:text-white">
-      {/* Luces de fondo decorativas */}
+    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 text-slate-200 selection:bg-primary-500 selection:text-white">
+      {/* Luces de fondo decorativas optimizadas */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full"></div>
-        <div className="absolute top-[20%] -right-[10%] w-[30%] h-[50%] bg-purple-600/10 blur-[120px] rounded-full"></div>
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary-600/5 blur-[120px] rounded-full animate-float"></div>
+        <div className="absolute top-[20%] -right-[10%] w-[30%] h-[50%] bg-purple-600/5 blur-[120px] rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute bottom-[10%] left-[20%] w-[30%] h-[30%] bg-cyan-600/5 blur-[100px] rounded-full animate-float" style={{ animationDelay: '4s' }}></div>
       </div>
 
-      <header className="relative z-10 pt-16 pb-12 px-4">
+      <header className="relative z-10 pt-20 pb-16 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter">
-            LinkTree <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Celider</span>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 tracking-tighter">
+            <span className="text-gradient">LinkTree</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-cyan-300">Celider</span>
           </h1>
-          <p className="text-gray-400 text-lg md:text-xl max-w-xl mx-auto font-light leading-relaxed">
-            La vitrina digital para los negocios con propósito en <span className="text-white font-medium border-b border-blue-500/50">Pasto</span>.
+          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
+            La vitrina digital para los negocios con propósito en <span className="text-white font-medium border-b border-primary-500/50">Pasto</span>. Descubre, conecta y apoya emprendimientos locales.
           </p>
         </div>
       </header>
 
       {/* Panel de Control: Buscador y Filtros */}
-      <section className="relative z-10 container mx-auto px-4 mb-16">
-        <div className="max-w-4xl mx-auto bg-white/[0.02] backdrop-blur-3xl p-6 md:p-10 rounded-[3rem] border border-white/5 shadow-2xl space-y-8">
+      <section className="relative z-10 container mx-auto px-4 mb-20">
+        <div className="max-w-5xl mx-auto glassmorphism-dark p-8 md:p-12 rounded-[3rem] space-y-10">
           <div className="w-full">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           </div>
-          <div className="h-px bg-white/5 w-full"></div>
+          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full"></div>
           <div className="w-full">
             <CategoryFilter
               categories={categories}
@@ -161,13 +165,16 @@ function App() {
         </div>
       </section>
 
-      <main className="relative z-10 container mx-auto px-4 pb-24">
+      <main className="relative z-10 container mx-auto px-4 pb-32">
         <div className="flex items-center justify-between mb-12 border-b border-white/5 pb-6">
           <h2 className="text-sm font-bold tracking-[0.3em] uppercase text-gray-500 flex items-center gap-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
+            <div className="w-2 h-2 bg-primary-500 rounded-full animate-ping"></div>
             Resultados
           </h2>
-          <span className="text-white font-mono text-xl">{filteredEmprendimientos.length}</span>
+          <div className="flex items-center gap-3">
+            <span className="text-white font-mono text-2xl font-bold">{filteredEmprendimientos.length}</span>
+            <span className="text-gray-500 text-sm">emprendimientos</span>
+          </div>
         </div>
 
         {filteredEmprendimientos.length === 0 ? (
@@ -176,21 +183,42 @@ function App() {
             <p className="text-gray-400 text-lg">No hay coincidencias.</p>
             <button 
               onClick={() => {setSearchTerm(''); setSelectedCategory('all')}} 
-              className="mt-4 text-blue-400 font-bold hover:text-blue-300"
+              className="mt-4 text-primary-400 font-bold hover:text-primary-300"
             >
               Limpiar filtros
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {filteredEmprendimientos.map((emp, index) => (
-              <EmprendimientoCard key={emp.id} emprendimiento={emp} index={index} />
+          <Suspense fallback={<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-[2.5rem] p-6 animate-pulse">
+                <div className="flex flex-col items-center text-center">
+                  <div className="mb-5 relative">
+                    <div className="w-24 h-24 rounded-full bg-white/10"></div>
+                  </div>
+                  <div className="h-4 w-20 bg-white/10 rounded-full mb-2"></div>
+                  <div className="h-6 w-40 bg-white/10 rounded-full mb-3"></div>
+                  <div className="h-3 w-60 bg-white/10 rounded-full mb-8"></div>
+                  <div className="flex gap-4">
+                    {[...Array(4)].map((_, j) => (
+                      <div key={j} className="w-11 h-11 rounded-full bg-white/10"></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             ))}
-          </div>
+          </div>}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {filteredEmprendimientos.map((emp, index) => (
+                <EmprendimientoCard key={emp.id} emprendimiento={emp} index={index} />
+              ))}
+            </div>
+          </Suspense>
         )}
       </main>
 
       <Footer />
+      <ScrollToTop />
     </div>
   )
 }

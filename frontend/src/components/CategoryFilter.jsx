@@ -4,7 +4,7 @@ const CategoryFilter = ({ categories, selectedCategory, setSelectedCategory }) =
   
   // Mapeo de nombres y emojis (Estructura limpia)
   const categoryConfig = {
-    all: { label: 'Todos', emoji: '🌐', color: 'hover:bg-blue-500/20 text-blue-100' },
+    all: { label: 'Todos', emoji: '🌐', color: 'hover:bg-primary-500/20 text-primary-100' },
     tecnologia: { label: 'Tecnología', emoji: '💻', color: 'hover:bg-cyan-500/20 text-cyan-100' },
     moda: { label: 'Moda', emoji: '👗', color: 'hover:bg-pink-500/20 text-pink-100' },
     comida: { label: 'Comida', emoji: '🍕', color: 'hover:bg-orange-500/20 text-orange-100' },
@@ -29,7 +29,7 @@ const CategoryFilter = ({ categories, selectedCategory, setSelectedCategory }) =
     <div className="space-y-4">
       {/* Título simple como el antiguo */}
       <div className="flex items-center gap-2 px-1">
-        <FiFilter className="text-blue-400 w-4 h-4" />
+        <FiFilter className="text-primary-400 w-4 h-4" />
         <h3 className="text-white/60 text-xs font-bold uppercase tracking-widest">
           Filtrar por categoría
         </h3>
@@ -50,7 +50,7 @@ const CategoryFilter = ({ categories, selectedCategory, setSelectedCategory }) =
                 border border-white/5 backdrop-blur-sm
                 ${color}
                 ${isSelected 
-                  ? 'bg-blue-600 border-blue-400 text-white scale-105 shadow-lg shadow-blue-600/20' 
+                  ? 'bg-primary-600 border-primary-400 text-white scale-105 shadow-lg shadow-primary-600/20' 
                   : 'bg-white/5 hover:border-white/20'
                 }
               `}
@@ -65,8 +65,8 @@ const CategoryFilter = ({ categories, selectedCategory, setSelectedCategory }) =
       {/* Indicador de filtro activo */}
       {selectedCategory !== 'all' && (
         <div className="px-1 animate-fadeIn">
-          <p className="text-[10px] text-blue-400/60 uppercase font-bold tracking-tighter">
-            Filtrando por: <span className="text-blue-300">{getCategoryData(selectedCategory).label}</span>
+          <p className="text-[10px] text-primary-400/60 uppercase font-bold tracking-tighter">
+            Filtrando por: <span className="text-primary-300">{getCategoryData(selectedCategory).label}</span>
           </p>
         </div>
       )}

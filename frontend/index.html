@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
     <title>Celider - Directorio de Emprendimientos</title>
     <meta name="description" content="Directorio de emprendimientos de la comunidad Celider. Busca, filtra y conecta con emprendedores." />
+    <meta name="keywords" content="emprendimientos, Pasto, Celider, directorio, negocios, Colombia" />
+    <meta name="author" content="Comunidad Celider" />
+    <meta name="theme-color" content="#020617" />
     <!-- Open Graph tags -->
     <meta property="og:title" content="Celider - Directorio de Emprendimientos" />
     <meta property="og:description" content="Directorio de emprendimientos de la comunidad Celider. Busca, filtra y conecta con emprendedores." />
@@ -17,15 +21,56 @@
     <meta name="twitter:title" content="Celider - Directorio de Emprendimientos" />
     <meta name="twitter:description" content="Directorio de emprendimientos de la comunidad Celider. Busca, filtra y conecta con emprendedores." />
     <meta name="twitter:image" content="https://celider.com/og-image.png" />
-    <!-- Fonts -->
+    <!-- Preconnect to critical external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <!-- Fonts with font-display:swap -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Celider" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta name="msapplication-TileColor" content="#020617" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <meta name="application-name" content="Celider" />
+    <!-- Inline critical CSS for faster initial paint -->
+    <style>
+      /* Critical CSS: ensure background and loading state */
+      body {
+        margin: 0;
+        background: linear-gradient(135deg, #020617 0%, #1e1b4b 100%);
+        font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+      #root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      /* Loading spinner */
+      .loading-spinner {
+        border: 4px solid rgba(59, 130, 246, 0.2);
+        border-top-color: #3b82f6;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen font-sans antialiased">
-    <div id="root"></div>
+    <div id="root">
+      <div class="loading-spinner" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
+    <!-- Preload main.jsx for faster execution -->
+    <link rel="modulepreload" href="/src/main.jsx" />
   </body>
 </html>

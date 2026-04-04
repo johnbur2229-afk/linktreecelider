@@ -98,6 +98,8 @@ app.get('/api/emprendimientos', async (req, res) => {
     
     console.log(`✅ Found ${result.rows.length} emprendimientos`);
     
+    // Add cache header for this endpoint (5 minutes)
+    res.set('Cache-Control', 'public, max-age=300');
     res.status(200).json(result.rows);
   } catch (error) {
     console.error('❌ Error fetching emprendimientos:', error);
@@ -139,6 +141,7 @@ app.get('/api/emprendimientos/categoria/:categoria', async (req, res) => {
     
     console.log(`✅ Found ${result.rows.length} emprendimientos for category ${categoria}`);
     
+    res.set('Cache-Control', 'public, max-age=300');
     res.status(200).json(result.rows);
   } catch (error) {
     console.error('❌ Error fetching emprendimientos by category:', error);
@@ -191,6 +194,7 @@ app.get('/api/emprendimientos/search', async (req, res) => {
     
     console.log(`✅ Found ${result.rows.length} results for search: "${q}"`);
     
+    res.set('Cache-Control', 'public, max-age=300');
     res.status(200).json(result.rows);
   } catch (error) {
     console.error('❌ Error searching emprendimientos:', error);
@@ -240,6 +244,7 @@ app.get('/api/emprendimientos/:id', async (req, res) => {
     
     console.log(`✅ Found emprendimiento: ${result.rows[0].nombre}`);
     
+    res.set('Cache-Control', 'public, max-age=300');
     res.status(200).json(result.rows[0]);
   } catch (error) {
     console.error('❌ Error fetching emprendimiento by ID:', error);
@@ -269,6 +274,7 @@ app.get('/api/categorias', async (req, res) => {
     
     console.log(`✅ Found ${categories.length} categories`);
     
+    res.set('Cache-Control', 'public, max-age=300');
     res.status(200).json(categories);
   } catch (error) {
     console.error('❌ Error fetching categories:', error);

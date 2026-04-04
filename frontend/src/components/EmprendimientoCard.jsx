@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Instagram, 
   Facebook, 
@@ -10,6 +10,17 @@ import { getCategoryColor } from '../utils/categoryColors';
 
 const EmprendimientoCard = ({ emprendimiento, index }) => {
   const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
+  useEffect(() => {
+    // Preload image
+    if (emprendimiento.url_foto) {
+      const img = new Image();
+      img.src = emprendimiento.url_foto;
+      img.onload = () => setImageLoaded(true);
+      img.onerror = () => setImageError(true);
+    }
+  }, [emprendimiento.url_foto]);
   
   // Extraemos las propiedades sincronizadas con tu tabla de Neon
   const {
@@ -88,14 +99,26 @@ const EmprendimientoCard = ({ emprendimiento, index }) => {
       <div className="flex flex-col items-center text-center">
         {/* Foto Circular con Efecto de Brillo al Hover */}
         <div className="mb-5 relative">
-          <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-primary-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           {url_foto && !imageError ? (
-            <img
-              src={url_foto}
-              alt={nombre}
-              className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg relative z-10"
-              onError={() => setImageError(true)}
-            />
+            <>
+              <img
+                src={url_foto}
+                alt={`Foto de ${nombre}`}
+                className={`w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg relative z-10 transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                loading="lazy"
+                decoding="async"
+                width="96"
+                height="96"
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setImageError(true)}
+              />
+              {!imageLoaded && (
+                <div className={`absolute inset-0 w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg ${getAvatarColor(id)}`}>
+                  {getInitials(nombre)}
+                </div>
+              )}
+            </>
           ) : (
             <div className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg relative z-10 ${getAvatarColor(id)}`}>
               {getInitials(nombre)}
@@ -109,7 +132,7 @@ const EmprendimientoCard = ({ emprendimiento, index }) => {
         </span>
 
         {/* Título y Descripción */}
-        <h3 className="text-2xl font-black text-white mb-3 tracking-tight group-hover:text-blue-400 transition-colors">
+        <h3 className="text-2xl font-black text-white mb-3 tracking-tight group-hover:text-primary-400 transition-colors duration-300">
           {nombre}
         </h3>
         <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 mb-8 px-2">
@@ -123,11 +146,12 @@ const EmprendimientoCard = ({ emprendimiento, index }) => {
               key={platform}
               href={url}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
               className={`w-11 h-11 rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-125 hover:-translate-y-1 active:scale-95 ${color}`}
-              title={platform}
+              title={`Visitar ${platform} de ${nombre}`}
+              aria-label={`Enlace a ${platform}`}
             >
-              <Icon size={22} />
+              <Icon size={22} aria-hidden="true" />
             </a>
           ))}
         </div>

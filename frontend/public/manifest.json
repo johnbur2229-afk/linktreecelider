@@ -1,0 +1,44 @@
+{
+  "name": "Celider - Directorio de Emprendimientos",
+  "short_name": "Celider",
+  "description": "Directorio de emprendimientos de la comunidad Celider. Busca, filtra y conecta con emprendedores.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#0ea5e9",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "48x48 72x72 96x96 128x128 256x256",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["business", "social", "lifestyle"],
+  "lang": "es",
+  "orientation": "portrait",
+  "shortcuts": [
+    {
+      "name": "Explorar emprendimientos",
+      "url": "/",
+      "description": "Ver todos los emprendimientos"
+    },
+    {
+      "name": "Añadir mi emprendimiento",
+      "url": "/#whatsapp",
+      "description": "Contactar para listar tu negocio"
+    }
+  ]
+}
