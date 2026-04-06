@@ -91,7 +91,7 @@ app.get('/api/emprendimientos', async (req, res) => {
         created_at
       FROM emprendimientos
       WHERE estado = true
-      ORDER BY nombre ASC
+      ORDER BY id ASC
     `;
     
     const result = await pool.query(query);
@@ -134,7 +134,7 @@ app.get('/api/emprendimientos/categoria/:categoria', async (req, res) => {
         created_at
       FROM emprendimientos
       WHERE categoria = $1 AND estado = true
-      ORDER BY nombre ASC
+      ORDER BY id ASC
     `;
     
     const result = await pool.query(query, [categoria]);
@@ -186,7 +186,7 @@ app.get('/api/emprendimientos/search', async (req, res) => {
       FROM emprendimientos
       WHERE (nombre ILIKE $1 OR descripcion ILIKE $1 OR categoria ILIKE $1)
         AND estado = true
-      ORDER BY nombre ASC
+      ORDER BY id ASC
     `;
     
     const searchTerm = `%${q}%`;
@@ -278,6 +278,145 @@ app.get('/api/categorias', async (req, res) => {
     res.status(200).json(categories);
   } catch (error) {
     console.error('❌ Error fetching categories:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Get all anuncios
+app.get('/api/anuncios', async (req, res) => {
+  try {
+    console.log('📥 Fetching all anuncios...');
+    
+    const query = `
+      SELECT 
+        id,
+        tipo,
+        titulo,
+        contenido,
+        estado,
+        fecha_publicacion
+      FROM anuncios
+      ORDER BY fecha_publicacion DESC
+    `;
+    
+    const result = await pool.query(query);
+    
+    console.log(`✅ Found ${result.rows.length} anuncios`);
+    
+    res.set('Cache-Control', 'public, max-age=300');
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('❌ Error fetching anuncios:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Get all tribus
+app.get('/api/tribus', async (req, res) => {
+  try {
+    console.log('📥 Fetching all tribus...');
+    
+    const query = `
+      SELECT 
+        id,
+        nombre,
+        estado,
+        vision,
+        vidas,
+        grito,
+        url_foto,
+        aniversario,
+        fecha_creacion
+      FROM tribus
+      ORDER BY nombre ASC
+    `;
+    
+    const result = await pool.query(query);
+    
+    console.log(`✅ Found ${result.rows.length} tribus`);
+    
+    res.set('Cache-Control', 'public, max-age=300');
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('❌ Error fetching tribus:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Create new emprendimiento (POST endpoint)
+app.post('/api/emprendimientos', async (req, res) => {
+  try {
+    console.log('📝 Creating new emprendimiento...');
+    
+    const {
+      nombre,
+      descripcion,
+      categoria,
+      url_foto,
+      whatsapp,
+      instagram,
+      facebook,
+      tiktok,
+      telegram
+    } = req.body;
+    
+    // Validation: required fields
+    if (!nombre || !categoria) {
+      return res.status(400).json({
+        error: 'Bad request',
+        message: 'Nombre and categoria are required',
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    // Default estado to false (pending approval)
+    const estado = false;
+    
+    const query = `
+      INSERT INTO emprendimientos 
+      (nombre, descripcion, categoria, estado, url_foto, whatsapp, instagram, facebook, tiktok, telegram, created_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
+      RETURNING id, nombre, categoria, estado, created_at
+    `;
+    
+    const values = [
+      nombre,
+      descripcion || '',
+      categoria,
+      estado,
+      url_foto || '',
+      whatsapp || '',
+      instagram || '',
+      facebook || '',
+      tiktok || '',
+      telegram || ''
+    ];
+    
+    const result = await pool.query(query, values);
+    
+    console.log(`✅ Created new emprendimiento: ${nombre} (ID: ${result.rows[0].id})`);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Emprendimiento submitted for approval',
+      data: result.rows[0],
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('❌ Error creating emprendimiento:', error);
     res.status(500).json({
       error: 'Internal server error',
       message: error.message,

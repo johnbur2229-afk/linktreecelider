@@ -5,6 +5,7 @@ const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
+    // Usamos scrollY que es el estándar actual
     if (window.scrollY > 300) {
       setIsVisible(true);
     } else {
@@ -29,8 +30,10 @@ const ScrollToTop = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-8 right-8 z-50 p-3 rounded-full bg-gradient-to-r from-primary-500 to-cyan-500 text-white shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-primary-500/30 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-900 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
+      className={`fixed bottom-8 right-8 z-50 p-3 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-2xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+        isVisible 
+          ? 'opacity-100 translate-y-0' 
+          : 'opacity-0 translate-y-10 pointer-events-none'
       }`}
       aria-label="Volver arriba"
     >
