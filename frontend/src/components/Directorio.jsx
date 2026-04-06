@@ -153,13 +153,13 @@ const Directorio = () => {
     <div className="space-y-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-white">Directorio de Emprendimientos</h2>
-          <p className="text-gray-400">Conecta con negocios locales de Pasto</p>
+          {/* <h2 className="text-2xl font-bold text-white">Linktree de Emprendimientos</h2>
+          <p className="text-gray-400">Conecta con negocios locales de Pasto</p> */}
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-white/[0.05] rounded-full">
+        {/* <div className="flex items-center gap-2 px-4 py-2 bg-white/[0.05] rounded-full">
           <span className="text-sm font-bold text-white">{filteredEmprendimientos.length}</span>
           <span className="text-gray-500 text-sm">emprendimientos</span>
-        </div>
+        </div> */}
       </div>
 
       {/* Panel de Control: Buscador y Filtros */}

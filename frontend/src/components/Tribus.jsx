@@ -14,14 +14,24 @@ const Tribus = () => {
   const fetchTribus = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/api/tribus`);
-      if (!response.ok) throw new Error('Error al cargar tribus');
+      const url = `${API_BASE_URL}/api/tribus`;
+      console.log(`🔄 Fetching tribus from: ${url}`);
+      
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
+      }
+      
       const data = await response.json();
+      console.log(`✅ Received ${data.length} tribus from API`);
+      
       setTribus(data);
       setError(null);
     } catch (err) {
-      setError(err.message);
-      console.error('Error fetching tribus:', err);
+      console.error('❌ Error fetching tribus:', err);
+      setError(`No se pudieron cargar las tribus. Detalles: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -123,12 +133,22 @@ const Tribus = () => {
           <Award className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-bold text-white mb-2">Error al cargar tribus</h3>
           <p className="text-gray-400 mb-4">{error}</p>
-          <button
-            onClick={fetchTribus}
-            className="px-6 py-2 bg-gradient-to-r from-red-500 to-orange-600 text-white font-bold rounded-xl hover:opacity-90 transition-all"
-          >
-            Reintentar
-          </button>
+          <div className="space-y-3">
+            <button
+              onClick={fetchTribus}
+              className="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-orange-600 text-white font-bold rounded-xl hover:opacity-90 transition-all"
+            >
+              Reintentar conexión
+            </button>
+            <div className="text-center">
+              <p className="text-xs text-gray-500">
+                URL de API: {API_BASE_URL}/api/tribus
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Verifica que el backend esté funcionando y las tablas existan.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     );

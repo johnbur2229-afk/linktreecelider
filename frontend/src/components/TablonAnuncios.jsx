@@ -13,17 +13,28 @@ const TablonAnuncios = () => {
   const fetchAnuncios = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/api/anuncios`);
-      if (!response.ok) throw new Error('Error al cargar anuncios');
+      const url = `${API_BASE_URL}/api/anuncios`;
+      console.log(`🔄 Fetching anuncios from: ${url}`);
+      
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${response.statusText}. ${errorText}`);
+      }
+      
       const data = await response.json();
+      console.log(`✅ Received ${data.length} anuncios from API`);
       
       // Filtrar solo anuncios con estado true (activos)
       const anunciosActivos = data.filter(anuncio => anuncio.estado === true);
+      console.log(`✅ Showing ${anunciosActivos.length} active anuncios`);
+      
       setAnuncios(anunciosActivos);
       setError(null);
     } catch (err) {
-      setError(err.message);
-      console.error('Error fetching anuncios:', err);
+      console.error('❌ Error fetching anuncios:', err);
+      setError(`No se pudieron cargar los anuncios. Detalles: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -124,12 +135,22 @@ const TablonAnuncios = () => {
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-bold text-white mb-2">Error al cargar anuncios</h3>
           <p className="text-gray-400 mb-4">{error}</p>
-          <button
-            onClick={fetchAnuncios}
-            className="px-6 py-2 bg-gradient-to-r from-red-500 to-orange-600 text-white font-bold rounded-xl hover:opacity-90 transition-all"
-          >
-            Reintentar
-          </button>
+          <div className="space-y-3">
+            <button
+              onClick={fetchAnuncios}
+              className="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-orange-600 text-white font-bold rounded-xl hover:opacity-90 transition-all"
+            >
+              Reintentar conexión
+            </button>
+            <div className="text-center">
+              <p className="text-xs text-gray-500">
+                URL de API: {API_BASE_URL}/api/anuncios
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Verifica que el backend esté funcionando y las tablas existan.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     );

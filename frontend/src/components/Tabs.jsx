@@ -4,7 +4,7 @@ const Tabs = ({ activeTab, setActiveTab }) => {
   const tabs = [
     { id: 'anuncios', label: 'Tablón de Anuncios', icon: <Megaphone size={20} /> },
     { id: 'tribus', label: 'Tribus', icon: <Users size={20} /> },
-    { id: 'directorio', label: 'Directorio', icon: <FolderTree size={20} /> },
+    { id: 'directorio', label: 'Linktree', icon: <FolderTree size={20} /> },
   ];
 
   return (

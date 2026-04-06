@@ -355,6 +355,65 @@ app.get('/api/tribus', async (req, res) => {
   }
 });
 
+// Diagnostic endpoint (uncomment to enable)
+/*
+app.get('/api/diagnostic', async (req, res) => {
+  try {
+    console.log('🔧 Running diagnostic...');
+    
+    const results = {
+      database: {
+        connected: false,
+        tables: {},
+        error: null
+      },
+      environment: process.env.NODE_ENV || 'development',
+      timestamp: new Date().toISOString()
+    };
+    
+    // Test database connection
+    try {
+      const client = await pool.connect();
+      results.database.connected = true;
+      
+      // Check table existence
+      const tables = ['emprendimientos', 'anuncios', 'tribus'];
+      for (const table of tables) {
+        const tableQuery = `SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = $1) as exists`;
+        const tableResult = await client.query(tableQuery, [table]);
+        results.database.tables[table] = tableResult.rows[0].exists;
+      }
+      
+      // Count records
+      for (const table of tables) {
+        if (results.database.tables[table]) {
+          const countQuery = `SELECT COUNT(*) as count FROM ${table}`;
+          const countResult = await client.query(countQuery);
+          results.database.tables[`${table}_count`] = parseInt(countResult.rows[0].count);
+        }
+      }
+      
+      client.release();
+      
+    } catch (dbError) {
+      results.database.error = dbError.message;
+    }
+    
+    console.log('📊 Diagnostic results:', JSON.stringify(results, null, 2));
+    
+    res.status(200).json(results);
+    
+  } catch (error) {
+    console.error('❌ Diagnostic error:', error);
+    res.status(500).json({
+      error: 'Diagnostic failed',
+      message: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+*/
+
 // Create new emprendimiento (POST endpoint)
 app.post('/api/emprendimientos', async (req, res) => {
   try {
