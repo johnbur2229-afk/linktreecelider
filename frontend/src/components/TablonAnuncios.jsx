@@ -172,7 +172,7 @@ const TablonAnuncios = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-white">Tablón de Anuncios</h2>
+          <h2 className="text-2xl font-bold text-white">Anuncios</h2>
           <p className="text-gray-400">Últimas novedades de la comunidad</p>
         </div>
         <div className="flex items-center gap-2 px-4 py-2 bg-white/[0.05] rounded-full">
